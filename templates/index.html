@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Automated Schema Design for NoSQL</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #e6f7ff;
+        }
+
+        /* Center-align the heading within its container */
+        .heading-container {
+            text-align: center;
+            margin-bottom: 20px; /* Add some bottom margin for spacing */
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        /* Display forms in a horizontal line */
+        .forms-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        form {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 0 10px; /* Add horizontal margin to separate forms */
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Style the submit button */
+        .submit-button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .processing {
+            display: none;
+        }
+
+        .loading-image {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        span {
+            font-size: 20px;
+            color: green;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="heading-container"> <!-- Center-align the heading within its container -->
+        <h1>Automated Schema Modeling (E-R to NoSQL)</h1>
+    </div>
+
+    <div class="forms-container">
+
+        <form action="/access_load" method="post" enctype="multipart/form-data">
+            <label for="entity-attr-input" id="entity-attr-label">Choose the Entity-Attribute CSV file:</label>
+            <input type="file" name="entity-attr" id="entity-attr-input" accept=".csv"/>
+            <span id="entity-attr-status"></span>
+            
+            <label for="cardinality-input" id="cardinality-label">Choose the Relationship Cardinality CSV file:</label>
+            <input type="file" name="cardinality" id="cardinality-input" accept=".csv"/>
+            <span id="cardinality-status"></span>
+            
+            <label for="query-text-input" id="query-text-label">Choose the Access Path file:</label>
+            <input type="file" name="query-text" id="query-text" accept=".txt"/>
+            <span id="query-text-status"></span>
+
+            <label for="custom_schema" id="custom_schema">Choose the Custom Schema Input File:</label>
+            <input type="file" name="custom_schema" id="custom_schema" accept=".txt"/>
+            
+            <button type="submit" class="submit-button">Submit</button>
+            <!-- <br><br>
+            <button type="button" class="submit-button" onclick="submitToEvaluate()">Evaluate</button>
+            <br><br>
+            <button type="button" class="submit-button" onclick="submitToEvaluate2()">Evaluate-2</button> -->
+        </form>
+        
+        <!-- <script>
+            function submitToEvaluate() {
+                // Assuming you want to send form data to /evaluate endpoint
+                document.forms[0].action = "/evaluate";
+                document.forms[0].submit();
+            }
+            function submitToEvaluate2() {
+                // Assuming you want to send form data to /evaluate endpoint
+                document.forms[0].action = "/evaluate2";
+                document.forms[0].submit();
+            }
+        </script> -->
+
+    </div>
+
+    <br><br>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const entityAttrInput = document.getElementById('entity-attr-input');
+            const entityAttrStatus = document.getElementById('entity-attr-status');
+            const cardinalityInput = document.getElementById('cardinality-input');
+            const cardinalityStatus = document.getElementById('cardinality-status');
+            const processingSpan = document.getElementsByClassName('processing');
+
+            entityAttrInput.addEventListener('change', checkFiles);
+            cardinalityInput.addEventListener('change', checkFiles);
+
+            function showProcessing() {
+                for (let i = 0; i < processingSpan.length; i++) {
+                    processingSpan[i].style.display = 'inline-block'; // Show processing message
+                }
+            }
+
+            function hideProcessing() {
+                for (let i = 0; i < processingSpan.length; i++) {
+                    processingSpan[i].style.display = 'none'; // Hide processing message
+                }
+            }
+        });
+
+        function validateForm() {
+            const entityAttrInput = document.getElementById('entity-attr-input');
+            const cardinalityInput = document.getElementById('cardinality-input');
+            const entityAttrStatus = document.getElementById('entity-attr-status');
+            const cardinalityStatus = document.getElementById('cardinality-status');
+
+            if (entityAttrInput.files.length === 1 && cardinalityInput.files.length === 0) {
+                alert('Please upload relationship cardinality file...');
+                return false; // Prevent form submission
+            } else if (entityAttrInput.files.length === 0 && cardinalityInput.files.length === 1) {
+                alert('Please upload entity-attribute file...');
+                return false; // Prevent form submission
+            } else if (entityAttrInput.files.length === 0 && cardinalityInput.files.length === 0) {
+                alert('Please upload files...');
+                return false;
+            } else if (entityAttrInput.files.length === 1 && cardinalityInput.files.length === 1) {
+                // Both files are uploaded, show progress bar
+                progressContainer.style.display = 'block';
+            } else {
+                pass // Prevent form submission
+            }
+        }
+
+        function validateCardFile() {
+            const cardinalityInput = document.getElementById('cardinality-input');
+
+            if (cardinalityInput.files.length === 0) {
+                alert('Please upload relationship cardinality file...');
+                return false; // Prevent form submission
+            } else {
+                pass // Prevent form submission
+            }
+        }
+</script>
+
+</body>
+</html>

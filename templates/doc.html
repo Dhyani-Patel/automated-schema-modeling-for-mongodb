@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collection: {{ collection_name }}</title>
+    <style>
+        body {
+            background-color: rgb(185, 227, 250); /* Set the background color to light blue */
+            text-align: center; /* Center-align the content in the body */
+        }
+        h1 {
+            font-size: 24px; /* Increase the font size for the heading */
+            padding: 15px; /* Add padding to the heading for spacing */
+        }
+        table {
+            border: 2px solid;
+            font-size: larger;
+            margin: 0 auto; /* Center-align the table horizontally within its container */
+            background-color: white; /* Set the table background color to white */
+        }
+        td {
+            padding: 15px; /* Add padding to table cells for spacing */
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Alternate row background color */
+        }
+        th {
+            background-color: #ddd; /* Header background color */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Collection: {{ collection_name }}</h1>
+    {% if not documents %}
+        <p>This collection is empty!</p>
+    {% else %}
+    <table>
+        <tbody>
+            {% for doc in documents %}
+                {% for key, value in doc.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endfor %}
+                <tr><td colspan="2"></td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</body>
+
+
+</html>

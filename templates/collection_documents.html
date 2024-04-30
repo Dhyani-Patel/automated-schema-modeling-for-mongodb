@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collection Documents</title>
+</head>
+<body>
+    <h1>Collection Documents</h1>
+    <table>
+        <!-- Display collection documents here -->
+        {% for collection_name, documents in collection_data.items() %}
+        <tr>
+            <td>
+                <h2>{{ collection_name }}</h2>
+                <ul>
+                    {% for document in documents %}
+                    <li>{{ document }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <!-- Add a button to initiate the download -->
+    <button id="downloadButton">Download Collections</button>
+
+    <script>
+        // Attach an event handler to the button
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            // Create a hidden link element
+            var link = document.createElement('a');
+            link.href = '/query';  // Route that triggers the download
+            link.download = 'collections.json';  // Name of the downloaded file
+            link.style.display = 'none';
+
+            // Add the link element to the page and simulate a click
+            document.body.appendChild(link);
+            link.click();
+
+            // Remove the link element after download
+            document.body.removeChild(link);
+        });
+    </script>
+</body>
+</html>

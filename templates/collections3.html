@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Collections</title>
+    <style>
+        body {
+            background-color: rgb(185, 227, 250);
+            text-align: center;
+            /* Center-align the content in the body */
+        }
+
+        h1 {
+            color: black;
+            /* Change the heading text color to white */
+        }
+
+        table {
+            border: 2px solid;
+            font-size: xx-large;
+            margin: 0 auto;
+            /* Center-align the table <h3>[Weights: 0.35, 0.30, 0.25, 0.10]</h3>within its container */
+            background-color: white;
+            /* Set the table background color to white */
+        }
+
+        td {
+            padding: 10px;
+            /* Add some padding to table cells for spacing */
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .eval_button {
+            font-size: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Collections</h1>
+    <table>
+        {% for collection in collections %}
+        <tr>
+            <td>
+                <a href="/collection/{{ collection }}">{{ collection }}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><br>
+    
+    <form action="/evaluate" method="post">
+        <input type="hidden" name="access_path_file" value="{{ access_path_file }}">
+        <input type="hidden" name="entity_attr_file" value="{{ entity_attr_file }}">
+        <input type="hidden" name="custom_schema_file" value="{{ custom_schema_file }}">
+        <button class="eval_button" id="eval_button1">Compare Against Custom Input</button>
+    </form>
+
+    <br><br><hr style="border: 1px solid red;"><br><br>
+
+    
+    <h1>Paths: {{ paths2 }}</h1>
+    <br><br>
+
+    <h2>Query-Based Metrics</h2>
+    
+    <table border="1" style="font-size: larger;">
+        <thead>
+            <tr>
+                <th style="padding: 5px;">Query</th>
+                <th style="padding: 5px;">Path Coverage</th>
+                <th style="padding: 5px;">Direct Edge Coverage</th>
+                <th style="padding: 5px;">All Edge Covrage</th>
+                <th style="padding: 5px;">Required Collections Coverage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in schema_metrics.metrics %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br><br>
+
+    <h2>Structural Metrics</h2>
+    <h3>[Weights: 0.25, 0.30, 0.20, 0.15, 0.10]</h3>
+    <table border="1" style="font-size: larger;">
+        <thead>
+            <tr>
+                <th style="padding: 5px;">Metric Name</th>
+                <th style="padding: 5px;">Score</th>
+            </tr>
+        </thead>
+        <tbody>
+                {% for metric_name, score in entity_metrics.items() %}
+                    <tr>
+                        <td>{{ metric_name }}</td>
+                        <td>{{ score }}</td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+
+</body>
+
+</html>

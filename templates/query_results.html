@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Query Results</title>
+</head>
+<body>
+    <h1>Query Results</h1>
+
+    <h1>Collection: {{ collection }}</h1>
+    <table>
+        <tbody>
+            {% for doc in results %}
+                {% for key, value in doc.items() %}
+                    <tr>
+                        <td> {{ key }}</td>
+                        <td> {{ value }}</td>
+                    </tr>
+                    <tr><td colspan="2"></td></tr> <!-- Add a separator between documents -->
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

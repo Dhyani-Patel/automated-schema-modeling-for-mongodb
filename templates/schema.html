@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schema Structures</title>
+</head>
+<body>
+    {% for index, schema_structure in enumerate(schema_structures) %}
+        <h2>Schema Structure {{ index+1 }}</h2>
+        <ul>
+        {% for entity_name, attributes in schema_structure.items() %}
+            <li>{{ entity_name }}:
+                <ul>
+                {% for attribute in attributes %}
+                    <li>{{ attribute }}</li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>
