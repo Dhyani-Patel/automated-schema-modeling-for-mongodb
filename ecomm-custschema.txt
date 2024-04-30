@@ -1,0 +1,4 @@
+user references order; user references product; product references user; cart embeds product; order embeds order_item
+user embeds product; product references user; cart references product; order references order_item
+user references order; order embeds order_item; cart embeds product
+product; order references order_item; user references cart

@@ -1,0 +1,8 @@
+customers
+products/inventory
+orders/orderlines
+customers/orders/orderlines/products
+products/orderlines/orders/customers
+orders/customers
+orders/orderlines
+orderlines/inventory

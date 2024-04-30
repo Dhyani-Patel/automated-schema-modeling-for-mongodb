@@ -1,0 +1,4 @@
+orders references orderlines; products references reorder; products embeds inventory; products references orderlines
+orderlines embeds products; orderlines embeds orders; products embeds categories; orders embeds customers; inventory embeds products; products embeds categories; reorder embeds products; products embeds categories
+customers references orders; orders references orderlines; products embeds inventory
+orders embeds customers; orders references orderlines; orderlines embeds products; products references reorder; products embeds inventory; products embeds categories; customers references orders; orders references orderlines; orderlines embeds products; products references orderlines; orderlines embeds orders; orders embeds customers; products embeds inventory; products embeds categories

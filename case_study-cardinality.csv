@@ -1,0 +1,7 @@
+Entity1,Entity2,RelationshipName,Card1,Card2
+customers,orders,custOrder,1,999
+orders,orderlines,ordItems,1,555
+orderlines,products,ordProd,300,1
+reorder,products,reordProd,800,1
+categories,products,catProd,1100,1
+products,inventory,prodInv,1,250

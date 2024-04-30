@@ -1,0 +1,6 @@
+Entity1,Entity2,RelationshipName,Card1,Card2
+order,user,User'sOrder,9999,1
+order,cart,OrderCart,1,1
+cart,product,ProductsInCart,999,100
+order,order_item,OrderedProduct,1,250
+user,cart,User'sCart,1,1
